@@ -18,8 +18,9 @@ class BDO:
                 self.welcome_screen()
             elif int(choice) == 2:
                 delete_gpm(self.id)
+                self.welcome_screen()
             else:
-                update_gpm()
+                update_gpm(self)
         else:
             print(ct.Wrong_choice)
             self.welcome_screen()
@@ -51,5 +52,26 @@ def delete_gpm(bdo_id):
     qb.delete_gpm(table_name, bdo_id, gpm_email)
 
 
-def update_gpm():
-    pass
+def update_gpm(bdo_id):
+    print('Enter the Email of GPM to be Updated \n')
+    gpm_email = input(ct.Enter_email)
+    table_name = 'GPM'
+
+    print(ct.Choose_Update_Option_For_GPM)
+    choice = input(ct.Enter_choice)
+
+    if int(choice) in [1, 2, 3, 4, 5]:
+        if int(choice) == 1:
+            updated_name = input('Enter New Name : \n')
+            qb.update_gpm_data(table_name, gpm_email, 'name', updated_name, bdo_id)
+        elif int(choice) == 2:
+            updated_password = input('Enter New Password : \n')
+            qb.update_gpm_data(table_name, gpm_email, 'password', updated_password, bdo_id)
+        elif int(choice) == 3:
+            updated_area = input('Enter New Area : \n')
+            qb.update_gpm_data(table_name, gpm_email, 'area', updated_area, bdo_id)
+        else:
+            updated_pincode = input('Enter New Pincode : \n')
+            qb.update_gpm_data(table_name, gpm_email, 'pincode', updated_pincode, bdo_id)
+    else:
+        print(ct.Wrong_choice)
