@@ -49,12 +49,12 @@ def start_application():
     print(ct.Choose_Role)
     choice = input(ct.Enter_choice)
     if int(choice) in [1, 2, 3]:
-        # TODO : Write the logic for selected choice
         if int(choice) == 1:
             login_bdo()
         elif int(choice) == 2:
             login_gpm()
         else:
+            # TODO : Write the logic for the memeber feild
             pass
     else:
         print(ct.Wrong_choice)
