@@ -4,10 +4,20 @@ import Utilities.Constants as ct
 
 
 def decorate_break_message(message):
+    """
+    function to decorate a message
+    :param message: message to be decorated
+    :return: null
+    """
     print("*" * 30 + message + "*" * 30)
 
 
 def display_job_card(data):
+    """
+    Method to display the job card
+    :param data: memeber info data
+    :return: job id card
+    """
     print("\n" + "-" * 30)
     print(ct.Name + str(data[0]))
     print(ct.Age + str(data[1]))
@@ -18,6 +28,11 @@ def display_job_card(data):
 
 
 def convert_string_to_date(date_str):
+    """
+    Method to convert string into date time
+    :param date_str: date string format
+    :return: date in date format
+    """
     format_str = '%d-%m-%Y'
     date_result = datetime.datetime.strptime(date_str, format_str)
     return date_result.date()

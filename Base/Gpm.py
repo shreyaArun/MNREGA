@@ -3,24 +3,6 @@ import Utilities.Extras as extras
 import Utilities.QueryBuilder as qb
 
 
-def view_complaints(gpm_id):
-    table_name = 'COMPLAINT'
-    result_data = qb.fetch_complaints_by_authority(table_name, gpm_id, 'GPM')
-    if len(result_data) != 0:
-        print("-" * 140)
-        for item in result_data:
-            print('Complaint Id : {complaint_id} |  Member Id : {member_id} | '
-                  'Message : {message} | Complaint Date : {date}'.format(complaint_id=item[0],
-                                                                         member_id=item[1],
-                                                                         message=item[2],
-                                                                         date=item[3]))
-            print("-" * 140)
-        complaint_id = input(ct.Choose_complaint_that_has_been_resolved)
-        qb.delete_item_from_table(table_name, complaint_id, 'id')
-    else:
-        print(ct.No_Complaint_present)
-
-
 class GPM:
     def __init__(self, gpm_id, gpm_name, asignee_bdo_id):
         self.id = gpm_id
@@ -59,6 +41,11 @@ class GPM:
 
 
 def create_member(gpm_id):
+    """
+    Function to create a member
+    :param gpm_id: gpm id
+    :return: null
+    """
     table_name = 'MEMBER'
     name = input(ct.Enter_name)
     email = input(ct.Enter_email)
@@ -71,7 +58,6 @@ def create_member(gpm_id):
     area = input(ct.Enter_area)
     age = input(ct.Enter_age)
     pincode = input(ct.Enter_pincode)
-
 
     qb.insert_member_table(table_name,
                            name,
@@ -86,6 +72,11 @@ def create_member(gpm_id):
 
 
 def delete_member(gpm_id):
+    """
+     Function to delete a member form the table
+    :param gpm_id: gpm id
+    :return: null
+    """
     table_name = 'MEMBER'
     print(ct.Member_available_in_your_zone)
     member_list = qb.get_item_for_asignee(table_name, gpm_id)
@@ -101,8 +92,12 @@ def delete_member(gpm_id):
     qb.delete_item_from_table(ct.COMPLAINT_TABLE, item_id, 'member_id')
 
 
-
 def update_member(gpm_id):
+    """
+    Function to update the details of the member
+    :param gpm_id: gpm id
+    :return: null
+    """
     table_name = 'MEMBER'
     print(ct.Member_available_in_your_zone)
     member_list = qb.get_item_for_asignee(table_name, gpm_id)
@@ -139,6 +134,11 @@ def update_member(gpm_id):
 
 
 def issue_job_card(gpm_id):
+    """
+    Method to issue a job card for a member
+    :param gpm_id: gpm id
+    :return: null
+    """
     table_name = 'MEMBER'
     print(ct.Member_available_in_your_zone)
     member_list = qb.get_item_for_asignee(table_name, gpm_id)
@@ -152,11 +152,15 @@ def issue_job_card(gpm_id):
 
 
 def assign_project(gpm_id, bdo_id):
+    """
+    function to assign project to a member
+    :param gpm_id: gpm id
+    :param bdo_id: bdo id
+    :return: null
+    """
     table_name_project_detail = 'PROJECT_MEMBER_DETAIL'
     table_name_project = "PROJECT"
     table_name_member = 'MEMBER'
-
-
 
     print(ct.Project_available_in_your_block)
     project_list = qb.get_item_for_asignee(table_name_project, bdo_id)
@@ -201,11 +205,15 @@ def assign_project(gpm_id, bdo_id):
 
 
 def raise_wage_request_for_all_members(gpm_id, bdo_id):
+    """
+    Function to raise the wage request for all the member lying under that gpm
+    :param gpm_id: gpm id
+    :param bdo_id: bdo id
+    :return: null
+    """
     table_name_wage_approval = 'WAGE_APPROVAL'
     table_name_project_details = "PROJECT_MEMBER_DETAIL"
     table_name_project = 'PROJECT'
-
-
 
     print(ct.Project_available_in_your_block)
     project_list = qb.get_item_for_asignee(table_name_project, bdo_id)
@@ -218,9 +226,32 @@ def raise_wage_request_for_all_members(gpm_id, bdo_id):
     if qb.is_project_wage_not_pending(table_name_wage_approval, project_id):
         member_detail_list = qb.get_member_project_details(table_name_project_details, project_id, gpm_id)
         for item in member_detail_list:
-            number_of_days_worked = int((extras.convert_string_to_date(item[3]) -
-                                         extras.convert_string_to_date(item[2])).days)
+            number_of_days_worked = int((extras.convert_string_to_date(str(item[3]).strip()) -
+                                         extras.convert_string_to_date(str(item[2]).strip())).days)
             amount = number_of_days_worked * 100
             qb.insert_wage_table(table_name_wage_approval, item[0], item[1], amount, number_of_days_worked, bdo_id)
     else:
         print(ct.Request_for_project_still_pending)
+
+
+def view_complaints(gpm_id):
+    """
+    Function to view the complaints under a gpm
+    :param gpm_id: gpm id
+    :return: null
+    """
+    table_name = 'COMPLAINT'
+    result_data = qb.fetch_complaints_by_authority(table_name, gpm_id, 'GPM')
+    if len(result_data) != 0:
+        print("-" * 140)
+        for item in result_data:
+            print('Complaint Id : {complaint_id} |  Member Id : {member_id} | '
+                  'Message : {message} | Complaint Date : {date}'.format(complaint_id=item[0],
+                                                                         member_id=item[1],
+                                                                         message=item[2],
+                                                                         date=item[3]))
+            print("-" * 140)
+        complaint_id = input(ct.Choose_complaint_that_has_been_resolved)
+        qb.delete_item_from_table(table_name, complaint_id, 'id')
+    else:
+        print(ct.No_Complaint_present)

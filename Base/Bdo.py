@@ -3,24 +3,6 @@ import Utilities.Extras as extras
 import Utilities.QueryBuilder as qb
 
 
-def view_complaints(bdo_id):
-    table_name = 'COMPLAINT'
-    result_data = qb.fetch_complaints_by_authority(table_name, bdo_id, 'BDO')
-    if len(result_data) != 0:
-        print("-" * 140)
-        for item in result_data:
-            print('Complaint Id : {complaint_id} |  Member Id : {member_id} | '
-                  'Message : {message} | Complaint Date : {date}'.format(complaint_id=item[0],
-                                                                         member_id=item[1],
-                                                                         message=item[2],
-                                                                         date=item[3]))
-            print("-" * 140)
-        complaint_id = input(ct.Choose_complaint_that_has_been_resolved)
-        qb.delete_item_from_table(table_name, complaint_id, 'id')
-    else:
-        print(ct.No_Complaint_present)
-
-
 class BDO:
     def __init__(self, bdo_id, bdo_name):
         self.id = bdo_id
@@ -64,6 +46,11 @@ class BDO:
 
 
 def create_gpm(bdo_id):
+    """
+    Method to create a new gpm under a bdo
+    :param bdo_id: assignee_bdo_id
+    :return: null
+    """
     gpm_name = input(ct.Enter_name)
     gpm_email = input(ct.Enter_email)
     gpm_password = input(ct.Enter_password)
@@ -75,6 +62,11 @@ def create_gpm(bdo_id):
 
 
 def delete_gpm(bdo_id):
+    """
+    Function to delete the gpm
+    :param bdo_id: bdo_id
+    :return: null
+    """
     print(ct.Enter_the_email_to_delete_gpm)
     gpm_email = input(ct.Enter_email)
     table_name = 'GPM'
@@ -82,6 +74,11 @@ def delete_gpm(bdo_id):
 
 
 def update_gpm(bdo_id):
+    """
+    Function to update the gpm details
+    :param bdo_id: bdo _id
+    :return: null
+    """
     print(ct.Enter_the_email_to_update_gpm)
     gpm_email = input(ct.Enter_email)
     table_name = 'GPM'
@@ -89,7 +86,7 @@ def update_gpm(bdo_id):
     print(ct.Choose_Update_Option_For_GPM)
     choice = input(ct.Enter_choice)
 
-    if int(choice) in [1, 2, 3, 4, 5]:
+    if int(choice) in [1, 2, 3, 4]:
         if int(choice) == 1:
             updated_name = input(ct.Enter_new_name)
             qb.update_gpm_data(table_name, gpm_email, 'name', "'{}'".format(updated_name), bdo_id)
@@ -107,6 +104,11 @@ def update_gpm(bdo_id):
 
 
 def create_project(bdo_id):
+    """
+    Function to create a new project as assigned per the the norms by the bdo
+    :param bdo_id: bdo_id
+    :return: null
+    """
     table_name = "PROJECT"
     project_name = input(ct.Enter_name)
     project_area = input(ct.Enter_area)
@@ -140,6 +142,11 @@ def create_project(bdo_id):
 
 
 def delete_project(bdo_id):
+    """
+    Function for the bdo to delete the project
+    :param bdo_id: bdo _id
+    :return: null
+    """
     table_name = 'PROJECT'
     print(ct.Project_available_in_your_block)
     project_list = qb.get_item_for_asignee(table_name, bdo_id)
@@ -154,6 +161,11 @@ def delete_project(bdo_id):
 
 
 def update_project(bdo_id):
+    """
+    Functions to update the project details by the bdo
+    :param bdo_id: bdo_id
+    :return: null
+    """
     table_name = 'PROJECT'
     print(ct.Project_available_in_your_block)
     project_list = qb.get_item_for_asignee(table_name, bdo_id)
@@ -190,30 +202,47 @@ def update_project(bdo_id):
 
 
 def approving_projects(bdo_id):
+    """
+    function for the bdo to approve member into projects
+    :param bdo_id:
+    :return:
+    """
     table_name_project = "PROJECT"
     table_name_project_details = "PROJECT_MEMBER_DETAIL"
     print(ct.Project_available_in_your_block)
     project_list = qb.get_item_for_asignee(table_name_project, bdo_id)
     print("-" * 60)
-    for item in project_list:
-        print('Project Id : {}  |   Project Name :{}'.format(item[0], item[1]))
-        print("-" * 60)
+    if len(project_list) != 0:
+        for item in project_list:
+            print('Project Id : {}  |   Project Name :{}'.format(item[0], item[1]))
+            print("-" * 60)
 
-    project_id = input(ct.Enter_the_project_id_to_view_pending_request)
-    result_data = qb.fetch_pending_request_for_project(table_name_project_details,
-                                                       project_id,
-                                                       bdo_id)
-    print('Choose the member id whom you wanna approve\n')
-    print('Member Id\t\tProject Id\t\tOnboarding Date\n')
-    for item in result_data:
-        print('\t\t{member_id}\t\t\t{project_id}\t\t\t{onboarding_date}'.format(member_id=item[0],
-                                                                                project_id=item[1],
-                                                                                onboarding_date=item[2]))
-    member_id = input(ct.Enter_the_member_id_to_be_allotted)
-    qb.approve_pending_details_for_project(table_name_project_details, member_id, 'request_status', 1)
+        project_id = input(ct.Enter_the_project_id_to_view_pending_request)
+        result_data = qb.fetch_pending_request_for_project(table_name_project_details,
+                                                           project_id,
+                                                           bdo_id)
+        if len(result_data) != 0:
+            print('Choose the member id whom you wanna approve\n')
+            print('Member Id\t\tProject Id\t\tOnboarding Date\n')
+            for item in result_data:
+                print('\t\t{member_id}\t\t\t{project_id}\t\t\t{onboarding_date}'.format(member_id=item[0],
+                                                                                        project_id=item[1],
+                                                                                        onboarding_date=item[2]))
+            member_id = input(ct.Enter_the_member_id_to_be_allotted)
+            qb.approve_pending_details_for_project(table_name_project_details, member_id, 'request_status', 1)
+        else:
+            print(' No Member Assigned Till now')
+
+    else:
+        print(" No Project Available")
 
 
 def approving_wages(bdo_id):
+    """
+    function to approve the pending wages
+    :param bdo_id: bdo _id
+    :return: null
+    """
     table_name_project = "PROJECT"
     table_name_wage_approval = "WAGE_APPROVAL"
     table_name_member = 'MEMBER'
@@ -242,3 +271,26 @@ def approving_wages(bdo_id):
         qb.update_item_details(table_name_member, member_id, 'days_worked', days_worked)
     else:
         print()
+
+
+def view_complaints(bdo_id):
+    """
+    Function to view the  complaints registered under BDO
+    :param bdo_id: bdo+id
+    :return: null
+    """
+    table_name = 'COMPLAINT'
+    result_data = qb.fetch_complaints_by_authority(table_name, bdo_id, 'BDO')
+    if len(result_data) != 0:
+        print("-" * 140)
+        for item in result_data:
+            print('Complaint Id : {complaint_id} |  Member Id : {member_id} | '
+                  'Message : {message} | Complaint Date : {date}'.format(complaint_id=item[0],
+                                                                         member_id=item[1],
+                                                                         message=item[2],
+                                                                         date=item[3]))
+            print("-" * 140)
+        complaint_id = input(ct.Choose_complaint_that_has_been_resolved)
+        qb.delete_item_from_table(table_name, complaint_id, 'id')
+    else:
+        print(ct.No_Complaint_present)

@@ -33,8 +33,8 @@ Choose_Action_For_GPM = 'Choose a Action : \n ' \
                         '6 for Raise Wage Approval Request \n ' \
                         '7 for View Complaints \n'
 Choose_Action_For_MEMBER = 'Choose a Action : \n ' \
-                        '1 for Check Wage \n ' \
-                        '2 for Raise Complaint \n '
+                           '1 for Check Wage \n ' \
+                           '2 for Raise Complaint \n '
 Choose_Update_Option_For_GPM = 'Choose what to Update :\n ' \
                                '1 for Change Name \n ' \
                                '2 for Change Password\n ' \

@@ -27,11 +27,23 @@ class MEMBER:
 
 
 def check_wage(member_id):
+    """
+    Function to check the wage of member
+    :param member_id: member id
+    :return: null
+    """
     wage_data = int(qb.fetch_wage_for_member(member_id))
     print('WAGE FOR YOUR PROJECT TASK : {}'.format(wage_data))
 
 
 def raise_complaint(member_id, asignee_gpm_id, reviewer_bdo_id):
+    """
+    Function to raise a complaint by the member
+    :param member_id: member id
+    :param asignee_gpm_id: gpm id
+    :param reviewer_bdo_id: bdo id
+    :return: null
+    """
     table_name = 'COMPLAINT'
 
     print(ct.Raise_complaint_to)
