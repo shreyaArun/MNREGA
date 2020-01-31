@@ -43,7 +43,7 @@ Database schema is created once via the file login.py
 Database Diagram 
 ----
 
-![Image of the database table](/home/nineleaps/Desktop/MANREGA/MNREGA.png?raw=true "Title")
+![Image of the database table](https://github.com/Man-Mohan-Gupta/MNREGA/blob/master/MNREGA.png)
 
 
 Key Entities in Code
