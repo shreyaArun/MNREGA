@@ -22,8 +22,6 @@ def create_table(table_name, *args):
         logging.info("Table with {} name created".format(table_name))
     except Exception as e:
         print("Error is : {}".format(e))
-    finally:
-        conn.close()
 
 
 def delete_gpm(table_name, asignee_id, email):
@@ -62,8 +60,6 @@ def delete_gpm(table_name, asignee_id, email):
 
     except Exception as e:
         print("Error is : {}".format(e))
-    finally:
-        conn.close()
 
 
 def insert_bdo_table(table_name,
@@ -84,8 +80,6 @@ def insert_bdo_table(table_name,
 
     except Exception as e:
         print("Error is {}".format(e))
-    finally:
-        conn.close()
 
 
 def insert_gpm_table(table_name,
@@ -115,8 +109,6 @@ def insert_gpm_table(table_name,
         conn.commit()
     except Exception as e:
         print("Error is {}".format(e))
-    finally:
-        conn.close()
 
 
 def insert_project_table(table_name, name, area, total_member, cost_estimate, project_type, start_date,
@@ -155,8 +147,6 @@ def insert_project_table(table_name, name, area, total_member, cost_estimate, pr
 
     except Exception as e:
         print("Error is {}".format(e))
-    finally:
-        conn.close()
 
 
 def validate_credential(table_name, email, password):
@@ -171,14 +161,12 @@ def validate_credential(table_name, email, password):
         cursor.execute("SELECT {table_name}.password FROM {table_name} WHERE {table_name}.email = '{email}';".format(
             table_name=table_name, email=email))
         db_password = cursor.fetchone()
-        if db_password is not None and db_password[0] == password:
+        if db_password is not None and int(db_password[0]) == password:
             return True
         else:
             return False
     except Exception as e:
         print("Error is {}".format(e))
-    finally:
-        conn.close()
 
 
 def get_bdo_details(table_name, email, password):
@@ -198,8 +186,6 @@ def get_bdo_details(table_name, email, password):
         return cursor.fetchone()
     except Exception as e:
         print("Error is {}".format(e))
-    finally:
-        conn.close()
 
 
 def get_gpm_or_member_details(table_name, email, password):
@@ -218,8 +204,6 @@ def get_gpm_or_member_details(table_name, email, password):
         return cursor.fetchone()
     except Exception as e:
         print("Error is {}".format(e))
-    finally:
-        conn.close()
 
 
 def update_gpm_data(table_name, email, item_key, item_value, asignee_id):
@@ -256,8 +240,6 @@ def update_gpm_data(table_name, email, item_key, item_value, asignee_id):
 
     except Exception as e:
         print("Error is {}".format(e))
-    finally:
-        conn.close()
 
 
 def update_item_details(table_name, item_id, item_key, item_value):
@@ -314,8 +296,6 @@ def delete_item_from_table(table_name, item_id, key):
 
     except Exception as e:
         print("Error as {}".format(e))
-    finally:
-        conn.close()
 
 
 def insert_member_table(table_name, name, email, password, gender, age, address, area, pincode, gpm_id):
@@ -351,8 +331,6 @@ def insert_member_table(table_name, name, email, password, gender, age, address,
         conn.commit()
     except Exception as e:
         print("Error as {}".format(e))
-    finally:
-        conn.close()
 
 
 def fetch_job_id_data(table_name, item_id):
@@ -419,8 +397,6 @@ def check_member_not_present(table_name_project_detail, item_id):
             return True
     except Exception as e:
         print("Error as {}".format(e))
-    finally:
-        conn.close()
 
 
 def assign_member_to_project(table_name_project_detail, item_id, project_id, gpm_id, bdo_id, onboarding_date,
@@ -546,8 +522,6 @@ def delete_member_wage_data(table_name_wage_approval, member_id):
         conn.commit()
     except Exception as e:
         print("Error as {}".format(e))
-    finally:
-        conn.close()
 
 
 def fetch_wage_data_for_project(table_name_wage_approval, project_id, bdo_id):
@@ -568,8 +542,6 @@ def fetch_wage_data_for_project(table_name_wage_approval, project_id, bdo_id):
         return cursor.fetchall()
     except Exception as e:
         print("Error as {}".format(e))
-    finally:
-        conn.close()
 
 
 def fetch_bdo_id(asignee_gpm_id):
@@ -638,8 +610,6 @@ def fetch_complaints_by_authority(table_name, authority_id, raise_to):
 
     except Exception as e:
         print("Error as {}".format(e))
-    finally:
-        conn.close()
 
 
 def set_gpm_field_as_null(table_name, key, field, gpm_id):
@@ -660,5 +630,3 @@ def set_gpm_field_as_null(table_name, key, field, gpm_id):
         conn.commit()
     except Exception as e:
         print("Error as {}".format(e))
-    finally:
-        conn.close()

@@ -1,6 +1,7 @@
 """Utlities.Extras"""
 import datetime
 import Utilities.Constants as ct
+import re
 
 
 def decorate_break_message(message):
@@ -37,3 +38,17 @@ def convert_string_to_date(date_str):
     date_result = datetime.datetime.strptime(date_str, format_str)
     return date_result.date()
 
+
+def validate_password(password):
+    if isinstance(password, int) and 100 < password < 1000:
+        return True
+    else:
+        return False
+
+
+def validate_email(email):
+    regex = "^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+    if re.search(regex, email):
+        return True
+    else:
+        return False

@@ -15,17 +15,30 @@ def login_bdo():
     :return: null
     """
     extras.decorate_break_message('Login For BDO')
-    email = input(ct.Enter_email)
-    password = input(ct.Enter_password)
-    if qb.validate_credential(ct.BDO_TABLE, email, password):
-        bdo_details = qb.get_bdo_details(ct.BDO_TABLE, email, password)
-        bdo_id = int(bdo_details[0])
-        bdo_name = str(bdo_details[1])
-        bdo = BDO(bdo_id, bdo_name)
-        bdo.welcome_screen()
-        logging.info("Successfully logged in as BDO {}".format(bdo_name))
-    else:
-        print(ct.Wrong_credentials)
+    try:
+        email = str(input(ct.Enter_email))
+        while not extras.validate_email(email):
+            print("Wrong Email Format. Please enter valid email \n")
+            email = str(input(ct.Enter_email))
+
+        password = int(input(ct.Enter_password))
+        while not extras.validate_password(password):
+            print("Wrong Password Format. Please enter numeric password between 101 and 999\n")
+            password = int(input(ct.Enter_password))
+
+        if qb.validate_credential(ct.BDO_TABLE, email, password):
+            bdo_details = qb.get_bdo_details(ct.BDO_TABLE, email, password)
+            bdo_id = int(bdo_details[0])
+            bdo_name = str(bdo_details[1])
+            bdo = BDO(bdo_id, bdo_name)
+            bdo.welcome_screen()
+            logging.info("Successfully logged in as BDO {}".format(bdo_name))
+        else:
+            print(ct.Wrong_credentials)
+            login_bdo()
+    except ValueError as e:
+        print("Error is {}".format(e))
+    finally:
         login_bdo()
 
 
@@ -35,17 +48,31 @@ def login_gpm():
     :return: null
     """
     extras.decorate_break_message('Login For GPM')
-    email = input(ct.Enter_email)
-    password = input(ct.Enter_password)
-    if qb.validate_credential(ct.GPM_TABLE, email, password):
-        gpm_details = qb.get_gpm_or_member_details(ct.GPM_TABLE, email, password)
-        gpm_id = int(gpm_details[0])
-        gpm_name = str(gpm_details[1])
-        asignee_bdo_id = int(gpm_details[2])
-        gpm = GPM(gpm_id, gpm_name, asignee_bdo_id)
-        gpm.welcome_screen()
-    else:
-        print(ct.Wrong_credentials)
+    try:
+        email = str(input(ct.Enter_email))
+        while not extras.validate_email(email):
+            print("Wrong Email Format. Please enter valid email \n")
+            email = str(input(ct.Enter_email))
+
+        password = int(input(ct.Enter_password))
+        while not extras.validate_password(password):
+            print("Wrong Password Format. Please enter numeric password between 101 and 999\n")
+            password = int(input(ct.Enter_password))
+
+        if qb.validate_credential(ct.GPM_TABLE, email, password):
+            gpm_details = qb.get_gpm_or_member_details(ct.GPM_TABLE, email, password)
+            gpm_id = int(gpm_details[0])
+            gpm_name = str(gpm_details[1])
+            asignee_bdo_id = int(gpm_details[2])
+            gpm = GPM(gpm_id, gpm_name, asignee_bdo_id)
+            gpm.welcome_screen()
+        else:
+            print(ct.Wrong_credentials)
+            login_gpm()
+
+    except ValueError as e:
+        print("Error is {}".format(e))
+    finally:
         login_gpm()
 
 
@@ -55,18 +82,31 @@ def login_member():
     :return:  null
     """
     extras.decorate_break_message('Login For MEMBER')
-    email = input(ct.Enter_email)
-    password = input(ct.Enter_password)
-    if qb.validate_credential(ct.MEMBER_TABLE, email, password):
-        member_details = qb.get_gpm_or_member_details(ct.MEMBER_TABLE, email, password)
-        member_id = int(member_details[0])
-        member_name = str(member_details[1])
-        asignee_gpm_id = int(member_details[2])
-        reviewer_bdo_id = int(qb.fetch_bdo_id(asignee_gpm_id))
-        member = MEMBER(member_id, member_name, asignee_gpm_id, reviewer_bdo_id)
-        member.welcome_screen()
-    else:
-        print(ct.Wrong_credentials)
+    try:
+        email = str(input(ct.Enter_email))
+        while not extras.validate_email(email):
+            print("Wrong Email Format. Please enter valid email \n")
+            email = str(input(ct.Enter_email))
+
+        password = int(input(ct.Enter_password))
+        while not extras.validate_password(password):
+            print("Wrong Password Format. Please enter numeric password between 101 and 999\n")
+            password = int(input(ct.Enter_password))
+        if qb.validate_credential(ct.MEMBER_TABLE, email, password):
+            member_details = qb.get_gpm_or_member_details(ct.MEMBER_TABLE, email, password)
+            member_id = int(member_details[0])
+            member_name = str(member_details[1])
+            asignee_gpm_id = int(member_details[2])
+            reviewer_bdo_id = int(qb.fetch_bdo_id(asignee_gpm_id))
+            member = MEMBER(member_id, member_name, asignee_gpm_id, reviewer_bdo_id)
+            member.welcome_screen()
+        else:
+            print(ct.Wrong_credentials)
+            login_member()
+
+    except ValueError as e:
+        print("Error as {}".format(e))
+    finally:
         login_member()
 
 
@@ -76,16 +116,21 @@ def start_application():
     :return: null
     """
     print(ct.Choose_Role)
-    choice = input(ct.Enter_choice)
-    if int(choice) in [1, 2, 3]:
-        if int(choice) == 1:
-            login_bdo()
-        elif int(choice) == 2:
-            login_gpm()
+    try:
+        choice = int(input(ct.Enter_choice))
+        if int(choice) in [1, 2, 3]:
+            if int(choice) == 1:
+                login_bdo()
+            elif int(choice) == 2:
+                login_gpm()
+            else:
+                login_member()
         else:
-            login_member()
-    else:
-        print(ct.Wrong_choice)
+            print(ct.Wrong_choice)
+            start_application()
+    except ValueError as e:
+        print("Error is {}".format(e))
+    finally:
         start_application()
 
 
