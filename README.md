@@ -63,4 +63,4 @@ Key Entities in Code
 |  +--Extras.py
 |  +--QueryBuilder.py
 ```
-
+**IF YOU ENCOUNTER ANY BUGS OR FOR ANY SUGGESTIONS REGARDING THE IMPROVEMENT FEEL FREE TO CONTACT ME **
